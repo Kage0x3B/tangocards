@@ -5,6 +5,7 @@ from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 from card_list import CardList
 from flashcard_manager import FlashcardManager
+from learn_window import LearnWindow
 
 
 class ShowListWindow(QMainWindow):
@@ -12,6 +13,7 @@ class ShowListWindow(QMainWindow):
                  parent=None):
         super(ShowListWindow, self).__init__(parent)
 
+        self.app_context = app_context
         self.flashcard_manager = flashcard_manager
         self.card_list = card_list
 
@@ -93,7 +95,9 @@ class ShowListWindow(QMainWindow):
         self.update_list()
 
     def on_click_learn(self):
-        pass
+        window = LearnWindow(self.app_context, self.flashcard_manager, self.card_list, parent=self.parent())
+        self.hide()
+        window.show()
 
     def on_click_delete(self):
         if len(self.cards_list_component.selectedIndexes()) < 1:
