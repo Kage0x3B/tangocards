@@ -30,8 +30,22 @@ class CardList:
         for card_data in json_data["cards"]:
             self.cards.append(Card(card_data["word"], card_data["solution"]))
 
+    def add_card(self, word, solution):
+        card = Card(word, solution)
+        self.cards.append(card)
+
+    def remove_card(self, card):
+        self.cards.remove(card)
+
     def get_card_name_list(self):
         return map(lambda c: c.word, self.cards)
+
+    def get_card(self, word):
+        for card in self.cards:
+            if card.word == word:
+                return card
+
+        return None
 
     def to_dict(self):
         data = {

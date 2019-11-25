@@ -8,7 +8,8 @@ from flashcard_manager import FlashcardManager
 
 
 class ShowListWindow(QMainWindow):
-    def __init__(self, app_context: ApplicationContext, flashcard_manager: FlashcardManager, card_list: CardList, parent=None):
+    def __init__(self, app_context: ApplicationContext, flashcard_manager: FlashcardManager, card_list: CardList,
+                 parent=None):
         super(ShowListWindow, self).__init__(parent)
 
         self.flashcard_manager = flashcard_manager
@@ -20,14 +21,16 @@ class ShowListWindow(QMainWindow):
         main_widget = QWidget()
         main_layout = QVBoxLayout()
 
-        # Initialized up here because the combobox already fires the currentIndexChanged signal on creation
-        self.card_list_model = QStringListModel(self.card_list.get_card_name_list())
-        self.card_list = QListView()
-        self.card_list.setModel(self.card_list_model)
-        self.card_list.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.card_list.doubleClicked.connect(self.on_list_doubleclick)
+        learn_button = QPushButton("Frag mich ab!")
+        learn_button.clicked.connect(self.on_click_learn)
+        main_layout.addWidget(learn_button)
 
-        main_layout.addWidget(self.card_list)
+        self.card_list_model = QStringListModel(self.card_list.get_card_name_list())
+        self.cards_list_component = QListView()
+        self.cards_list_component.setModel(self.card_list_model)
+        self.cards_list_component.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        main_layout.addWidget(self.cards_list_component)
 
         tool_buttons_widget = QWidget()
         tool_buttons_layout = QHBoxLayout()
@@ -45,41 +48,61 @@ class ShowListWindow(QMainWindow):
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
 
+    def update_list(self):
+        self.card_list_model = QStringListModel(self.card_list.get_card_name_list())
+        self.cards_list_component.setModel(self.card_list_model)
+        self.cards_list_component.repaint()
+
     def on_click_add(self):
-        text, ok = QInputDialog.getText(self, 'Lernkartei erstellen', 'Namen für die Lernkartei:')
+        word_text, ok1 = QInputDialog.getText(self, 'Karte hinzufügen', 'Wort:')
 
-        if ok:
-            if text is None or len(text) < 2:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Warning)
-                msg.setText("Der Name ist leer oder zu kurz!")
-                msg.exec_()
+        if not ok1:
+            return
 
-                return
+        if word_text is None or len(word_text) < 2:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Der Text ist leer oder zu kurz!")
+            msg.exec_()
 
-            self.flashcard_manager.create_list(self.current_language, text)
+            return
 
-            self.on_select_language(self.current_language.value)  # Update gui
+        if self.card_list.get_card(word_text) is not None:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Wort ist bereits in der Lernkartei!")
+            msg.exec_()
+
+            return
+
+        solution_text, ok2 = QInputDialog.getText(self, 'Karte hinzufügen', 'Lösung:')
+
+        if not ok2:
+            return
+
+        if solution_text is None or len(word_text) < 2:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Der Text ist leer oder zu kurz!")
+            msg.exec_()
+
+            return
+
+        self.card_list.add_card(word_text, solution_text)
+        self.flashcard_manager.save_list(self.card_list)
+        self.update_list()
 
     def on_click_learn(self):
-        if len(self.card_list.selectedIndexes()) < 1:
-            return
-
-        card_list = self.flashcard_manager.get_flashcard_list_by_name(self.current_language,
-                                                                      self.card_list.selectedIndexes()[0].data())
-        print("learn ", card_list.name)
+        pass
 
     def on_click_delete(self):
-        if len(self.card_list.selectedIndexes()) < 1:
+        if len(self.cards_list_component.selectedIndexes()) < 1:
             return
 
-        list_name = self.card_list.selectedIndexes()[0].data()
+        word_text = self.cards_list_component.selectedIndexes()[0].data()
+        card = self.card_list.get_card(word_text)
 
-        choice = QMessageBox.question(self, 'Löschen',
-                                      "Willst du wirklich die Liste \"" + list_name + "\" löschen?",
-                                      QMessageBox.Yes | QMessageBox.No)
-
-        if choice == QMessageBox.Yes:
-            self.flashcard_manager.delete_list(self.current_language, list_name)
-
-            self.on_select_language(self.current_language.value)  # Update gui
+        if card is not None:
+            self.card_list.remove_card(card)
+            self.flashcard_manager.save_list(self.card_list)
+            self.update_list()
