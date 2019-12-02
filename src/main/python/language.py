@@ -2,19 +2,18 @@ from enum import IntEnum, Enum
 
 DISPLAY_NAMES = [
     "Englisch",
-    "Deutsch",
     "Französisch",
     "Japanisch",
-    "Chinesisch"
+    "Mandarin Chinesisch (vereinfacht)"
 ]
 
 
 class Language(Enum):
     english = 0
-    german = 1
-    french = 2
-    japanese = 3
-    chinese = 4
+    #german = 1
+    french = 1
+    japanese = 2
+    chinese = 3
 
     def get_display_name(self):
         return DISPLAY_NAMES[self.value]

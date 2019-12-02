@@ -8,11 +8,26 @@ from card_list_window import CardListWindow
 from flashcard_manager import FlashcardManager
 
 
-def create_palette():
-    palette = QPalette()
-    # palette.setColor(QPalette.Window, QColor(153, 153, 153))
+STYLESHEET = """
+* {
 
-    return palette
+}
+
+QPushButton {
+    color: #fefefe;
+    background-color: #dd291c;
+}
+
+QComboBox {
+    background-color: #dd8888;
+}
+"""
+
+#def create_palette():
+#    palette = QPalette()
+#    palette.setColor(QPalette.Window, QColor(153, 153, 153))
+#
+#    return palette
 
 
 if __name__ == '__main__':
@@ -23,7 +38,8 @@ if __name__ == '__main__':
     app.setOrganizationName("Syscy")
     app.setOrganizationDomain("syscy.de")
     app.setStyle("Fusion")
-    app.setPalette(create_palette())
+    app.setStyleSheet(STYLESHEET)
+    #app.setPalette(create_palette())
 
     flashcard_manager = FlashcardManager()
 
