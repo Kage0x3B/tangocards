@@ -32,7 +32,7 @@ class FlashcardManager:
             for file in os.listdir(language_dir):
                 if file.endswith(".json"):
                     try:
-                        with open(os.path.join(language_dir, file)) as json_file:
+                        with open(os.path.join(language_dir, file), encoding='utf-8') as json_file:
                             card_list = CardList(file, language, json_data=json.load(json_file))
                             self.card_lists[language.value][card_list.id] = card_list
                     except:

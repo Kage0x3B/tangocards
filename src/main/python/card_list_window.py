@@ -21,6 +21,7 @@ class CardListWindow(QMainWindow):
         self.setWindowTitle("Meine Lernkarteien - TangoCards")
 
         main_widget = QWidget()
+        main_widget.setProperty("cssClass", "background")
         main_layout = QVBoxLayout()
 
         # Initialized up here because the combobox already fires the currentIndexChanged signal on creation

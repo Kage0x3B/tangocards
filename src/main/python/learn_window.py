@@ -23,6 +23,7 @@ class LearnWindow(QMainWindow):
         self.setWindowTitle("Abfrage: " + self.card_list.name + " - TangoCards")
 
         main_widget = QWidget()
+        main_widget.setProperty("cssClass", "background")
         main_layout = QVBoxLayout()
 
         upper_container = QWidget()

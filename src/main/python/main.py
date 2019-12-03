@@ -1,29 +1,54 @@
 import sys
 
-from PyQt5.QtGui import QPalette, QColor
-from PyQt5.QtWidgets import QApplication, QStyleFactory
+from PyQt5.QtWidgets import QApplication
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 
 from card_list_window import CardListWindow
 from flashcard_manager import FlashcardManager
 
-
 STYLESHEET = """
-* {
-
+QMainWindow, QDialog {
+    background-color: #444;
 }
 
 QPushButton {
-    color: #fefefe;
-    background-color: #dd291c;
+    color: #333;
+    background-color: rgb(255, 25, 38);
+}
+
+QLabel {
+    color: #ddd;
+}
+
+QLineEdit {
+    background-color: #ddd;
+}
+
+QListView {
+    color: #ddd;
+    background-color: #555;
+    border: 1px solid rgba(255, 25, 38, 0.3);
+}
+
+QListView::item:selected:active:hover {
+    background-color: rgba(255, 25, 38, 0.5);
+}
+
+QListView::item:selected:active:!hover {
+    background-color: rgba(255, 25, 38, 0.2);
+}
+
+QListView::item:!selected:hover {
+    background-color: rgba(255, 100, 38, 0.5);
 }
 
 QComboBox {
-    background-color: #dd8888;
+    color: #333;
+    background-color: rgba(255, 25, 38, 0.4);
 }
 """
 
-#def create_palette():
+# def create_palette():
 #    palette = QPalette()
 #    palette.setColor(QPalette.Window, QColor(153, 153, 153))
 #
@@ -39,7 +64,7 @@ if __name__ == '__main__':
     app.setOrganizationDomain("syscy.de")
     app.setStyle("Fusion")
     app.setStyleSheet(STYLESHEET)
-    #app.setPalette(create_palette())
+    # app.setPalette(create_palette())
 
     flashcard_manager = FlashcardManager()
 

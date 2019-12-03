@@ -21,6 +21,7 @@ class ShowListWindow(QMainWindow):
         self.setWindowTitle(self.card_list.name + " - TangoCards")
 
         main_widget = QWidget()
+        main_widget.setProperty("cssClass", "background")
         main_layout = QVBoxLayout()
 
         learn_button = QPushButton("Frag mich ab!")
@@ -95,6 +96,14 @@ class ShowListWindow(QMainWindow):
         self.update_list()
 
     def on_click_learn(self):
+        if len(self.card_list.cards) < 1:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Du musst erst Lernkarten hinzufügen!")
+            msg.exec_()
+
+            return
+
         window = LearnWindow(self.app_context, self.flashcard_manager, self.card_list, parent=self.parent())
         self.hide()
         window.show()
