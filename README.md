@@ -1,4 +1,4 @@
-# ![TangoCards Logo](https://syscy.de/stuff/tangocards/64.png "TangoCards") TangoCards
+# ![TangoCards Logo](https://syscy.de/stuff/tangocards/32.png "TangoCards") TangoCards
 Flashcard learning program
 
 ## Install
